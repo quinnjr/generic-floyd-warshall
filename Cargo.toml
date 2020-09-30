@@ -1,6 +1,6 @@
 [package]
 name = "generic-floyd-warshall"
-description = "A generic implementation of the Floyd-Warshall algorithm for array-like types in the standard library."
+description = "A generic implementation of the Floyd-Warshall algorithm for array-like types."
 version = "0.1.0"
 authors = ["Joseph R. Quinn <423821+quinnjr@users.noreply.github.com>"]
 license = "MIT"
@@ -10,6 +10,6 @@ keywords = ["floyd", "warshall", "informatics", "matrix"]
 categories = ["algorithms", "graphics", "science"]
 
 [badges]
-maintenance = { status = "passively-maintained" }
+maintenance = { status = "experimental" }
 
 [dependencies]
