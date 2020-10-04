@@ -1,32 +1,39 @@
 // Copyright (C) 2020 Joseph R. Quinn
 // SPDX-License-Identifier: MIT
 
-use std::ops::{ Add, Index, IndexMut };
+#![feature(const_generics)]
+
+#![allow(incomplete_features)]
+
 use std::cmp::PartialOrd;
+use std::ops::{ Add, IndexMut };
 
 /// Generic implementation of the Floyd-Warshall algorithm
 /// for finding the shortest paths in a weighted graph.
-pub fn floyd_warshall<T, N, M>(graph: &mut M, size: usize)
+pub fn floyd_warshall<N, M, V>(graph: &N, size: usize) -> N
 where
-    T: Add<Output=T> + PartialOrd + Copy,
-    N: IndexMut<usize, Output=T> + Sized,
-    M: IndexMut<usize, Output=N> + Sized,
-    <N as Index<usize>>::Output: Sized
+    V: Add<Output=V> + PartialOrd + Copy + Clone + Sized,
+    M: IndexMut<usize, Output=V> + Clone + Sized,
+    N: IndexMut<usize, Output=M> + Clone + Sized
 {
+    let mut result_graph = graph.clone();
+
     for k in 0..size {
         for i in 0..size {
             for j in 0..size {
-                if graph[i][j] > graph[i][k] + graph[k][j] {
-                    graph[i][j] = graph[i][k] + graph[k][j]
+                if result_graph[i][j] > result_graph[i][k] + result_graph[k][j] {
+                    result_graph[i][j] = result_graph[i][k] + result_graph[k][j];
                 }
             }
         }
     }
+
+    result_graph
 }
 
 #[cfg(test)]
 mod tests {
-    use super::floyd_warshall;
+    use super::*;
 
     #[test]
     fn test_floyd_warshall_vector() {
@@ -44,10 +51,9 @@ mod tests {
             vec![3.0, -1.0, 1.0, 0.0]
         ];
 
-        let len = graph.len();
-        let mut calculated = graph.clone();
+        let length = graph.len();
 
-        floyd_warshall(&mut calculated, len);
+        let calculated = floyd_warshall(&graph, length);
 
         assert_eq!(expected, calculated);
     }
