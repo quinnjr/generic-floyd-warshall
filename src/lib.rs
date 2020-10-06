@@ -21,6 +21,10 @@ where
     for k in 0..size {
         for i in 0..size {
             for j in 0..size {
+                if output_graph[i][k].parse<f32>() == f32::INFINITY || output_graph[k][j].parse<f32>() == f32::INFINITY {
+                    continue;
+                }
+
                 if result_graph[i][j] > result_graph[i][k] + result_graph[k][j] {
                     result_graph[i][j] = result_graph[i][k] + result_graph[k][j];
                 }
